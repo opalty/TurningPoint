@@ -1,0 +1,190 @@
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.cart-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/*장바구니 패널*/
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  z-index: 999;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+  font-family: 'Pretendard', sans-serif;
+}
+
+.cart-sidebar.active {
+  right: 0; 
+}
+
+
+.cart-header {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-header h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.cart-close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  color: #333;
+}
+
+
+.cart-body {
+  flex: 1;
+  overflow-y: auto; 
+  padding: 0 24px;
+}
+
+.empty-cart-message {
+  text-align: center;
+  margin-top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 14px;
+}
+
+
+.cart-item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cart-item {
+  display: flex;
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item-img img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  background-color: #f5f5f5;
+}
+
+.cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cart-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cart-item-title {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #333;
+  padding-right: 10px;
+}
+
+.cart-item-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #999;
+}
+.cart-item-delete .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.cart-item-price {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.cart-item-options {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.cart-quantity-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.qty-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #555;
+  padding: 0 5px;
+}
+.qty-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cart-footer {
+  padding: 24px;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+
+.cart-subtotal {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.checkout-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+  background: #333;
+}
