@@ -1,0 +1,191 @@
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* ------------------------ payment --------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+
+* {
+    box-sizing: border-box;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  
+  body {
+    margin: 0;
+  }
+  
+  
+  .main-background {
+    background-color: #ffffff;
+    min-height: calc(100vh - 70px);
+    padding-top: 70px;
+  }
+  
+  .checkout-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0;
+    min-height: 100%;
+  }
+  
+  .checkout-checkout {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    background: #dedede;
+  }
+  
+  /* 왼쪽 */
+  .checkout-left {
+    flex: 1.7;
+    padding: 40px 60px;
+    overflow-y: auto;
+    max-height: calc(100vh - 70px);
+    -ms-overflow-style: none;
+  }
+  
+  .checkout-left::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .checkout-left h2,
+  .checkout-left h3 {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+  }
+  
+  .checkout-input,
+  .checkout-select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border: 1px solid #000000;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, background-color 0.2s;
+    background-color: #f4f7fa;
+    color: #000000;
+  }
+  
+  .checkout-input:focus,
+  .checkout-select:focus {
+    outline: none;
+    border-color: #000000;
+  }
+  
+  .checkout-name-row,
+  .checkout-postal-search-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .checkout-postal-search-row .checkout-input,
+  .checkout-postal-search-row .checkout-button {
+    height: 44px;
+    font-size: 0.95rem;
+  }
+  
+  .checkout-postal-search-row .checkout-input {
+    flex: 1;
+  }
+  
+  .checkout-postal-search-row .checkout-button {
+    padding: 0 16px;
+    border: 1.3px solid #000000;
+    border-radius: 6px;
+    background: #000000;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .checkout-postal-search-row .checkout-button:hover {
+    background-color: #499aa1;
+    color: #000000;
+  }
+  
+  /* 오른쪽 */
+  .checkout-right {
+    flex: 1;
+    padding: 40px;
+    background-color: #ffffff;
+    position: sticky;
+    top: 70px;
+    /* header 바로 아래 고정 */
+    height: calc(100vh - 70px);
+    overflow: hidden;
+  }
+  
+  .checkout-summary {
+    border: 1px solid #000000;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #dedede;
+  }
+  
+  .checkout-item-container {
+    overflow-y: auto;
+    max-height: 200px;
+    padding-right: 5px;
+  }
+  
+  .checkout-item-container::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  
+  .checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .checkout-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #000000;
+  }
+  
+  .checkout-item-info {
+    flex: 1;
+  }
+  
+  .checkout-price-info {
+    border-top: 1px solid #000000;
+    padding-top: 15px;
+    margin-top: 15px;
+  }
+  
+  .checkout-total {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: right;
+  }
+  
+  .checkout-pay-btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    border: none;
+    background: #000000;
+    color: #f4f7fa;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .checkout-pay-btn:hover {
+    background: #499aa1;
+  }

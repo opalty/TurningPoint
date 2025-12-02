@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<!-- footer 추가
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turning Point</title>
+  <link rel="stylesheet" href="02_track33_heater.css">
+  <link rel="stylesheet" href="02_track33_payment.css">
+  <link rel="stylesheet" href="footer.css">
+
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+</head>
+
+<body class="payment">
+  <header>
+    <div class="logo">
+      <a href="02_track33_homepage.html">
+        <img src="02_logo.png" alt="사이트 로고" />
+      </a>
+    </div>
+
+    <div class="header-right">
+      <nav>
+        <ul>
+          <li><a href="02_track33_homepage.html">Home</a></li>
+          <li><a href="02_track33_shoppinglist.html">Shop All</a></li>
+          <li><a href="02_track33_membership.html">Membership</a></li>
+        </ul>
+      </nav>
+
+      <!-- 네비게이션 서치바-->
+      <form class="search header-search" action="/search" method="get" role="search" aria-label="상단 상품 검색">
+        <input type="search" name="q" placeholder="Search" aria-label="상품 검색" />
+        <span class="material-symbols-outlined">search</span>
+      </form>
+
+      <div class="icons">
+        <a href="#" aria-label="장바구니">
+          <span class="material-symbols-outlined" style="font-size:24px;">shopping_cart</span>
+        </a>
+        <a href="#" aria-label="마이페이지">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-background">
+    <div class="checkout-container">
+      <div class="checkout-checkout">
+        <!-- 왼쪽 -->
+        <div class="checkout-left">
+          <h2>배송 정보</h2>
+          <select class="checkout-select" id="country">
+            <option value="">국가/지역 선택</option>
+            <option selected>대한민국</option>
+            <option>일본</option>
+            <option>미국</option>
+          </select>
+          <div class="checkout-name-row">
+            <input class="checkout-input" type="text" placeholder="성">
+            <input class="checkout-input" type="text" placeholder="이름">
+          </div>
+          <input class="checkout-input" type="text" placeholder="연락처">
+          <div class="checkout-postal-search-row">
+            <input class="checkout-input" type="text" placeholder="우편번호">
+            <button class="checkout-button" type="button">검색</button>
+          </div>
+          <input class="checkout-input" type="text" placeholder="주소">
+          <input class="checkout-input" type="text" placeholder="상세주소">
+
+          <h3 style="margin-top:30px;">카드 정보</h3>
+          <input class="checkout-input" type="text" placeholder="카드 번호">
+          <div class="checkout-name-row">
+            <input class="checkout-input" type="month" placeholder="유효기간 (MM/YY)">
+            <input class="checkout-input" type="text" placeholder="CVC">
+          </div>
+          <input class="checkout-input" type="text" placeholder="주문자 이름">
+        </div>
+
+        <!-- 오른쪽 -->
+        <div class="checkout-right">
+          <div class="checkout-summary">
+            <div class="checkout-item-container">
+              <div class="checkout-item">
+                <img src="02_vinyl2.jpg" alt="상품 이미지">
+                <div class="checkout-item-info">
+                  <div>The Black Skirts 3rd Album LP Splatter Color</div>
+                  <div style="font-size:0.9rem; color:#666;">수량 1개</div>
+                </div>
+                <div>₩25,000</div>
+              </div>
+              <div class="checkout-item">
+                <img src="02_vinyl0.jpg" alt="상품 이미지">
+                <div class="checkout-item-info">
+                  <div>Sade Love Deluxe (2LP)</div>
+                  <div style="font-size:0.9rem; color:#666;">수량 1개</div>
+                </div>
+                <div>₩25,000</div>
+              </div>
+              <div class="checkout-item">
+                <img src="02_vinyl4.png"alt="상품 이미지">
+                <div class="checkout-item-info">
+                  <div>Radwimps Your Name OST LP Black (2LP)</div>
+                  <div style="font-size:0.9rem; color:#666;">수량 1개</div>
+                </div>
+                <div>₩25,000</div>
+              </div>
+              <div class="checkout-item">
+                <img src="02_vinyl1.png" alt="상품 이미지">
+                <div class="checkout-item-info">
+                  <div>Taylor Swift Lover Live From Paris (2LP)</div>
+                  <div style="font-size:0.9rem; color:#666;">수량 1개</div>
+                </div>
+                <div>₩25,000</div>
+              </div>
+            </div>
+
+            <div class="checkout-price-info">
+              <p>상품 합계: ₩100,000</p>
+              <p>배송비: ₩2,500</p>
+            </div>
+            <div class="checkout-total">총 결제금액: ₩102,500</div>
+            <button class="checkout-pay-btn">Pay Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="footer.css" />
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-about">
+      <p>
+        우리는 디지털 속 빠른 음악 소비에서 벗어나,<br />
+        바늘이 닿는 그 순간의 떨림과 온기를 되살리고자 합니다.<br />
+        한 장의 LP가 누군가의 하루를 바꾸는
+        <strong>‘전환점 (Turning Point)’</strong>이 되길 바라며 —
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <div class="footer-logo-selection">
+      <img src="02_logo.png" alt="turning point" class="footer-logo-img" />
+    </div>
+
+    <div class="footer-copy">© 2025 turning point</div>
+  </div>
+</footer>
+
+  
+
+</body>
+
+</html>

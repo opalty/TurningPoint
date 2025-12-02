@@ -1,0 +1,197 @@
+/* --- 장바구니 사이드바 스타일 --- */
+
+/* 1. 배경 오버레이 (장바구니 열렸을 때 뒤쪽 어둡게) */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.cart-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 2. 장바구니 패널 */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -450px; /* 처음에 화면 밖으로 숨김 */
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  z-index: 999;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* 부드러운 슬라이딩 */
+  font-family: 'Pretendard', sans-serif;
+}
+
+.cart-sidebar.active {
+  right: 0; /* 활성화 시 화면 안으로 들어옴 */
+}
+
+/* 헤더: 타이틀과 닫기 버튼 */
+.cart-header {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-header h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.cart-close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  color: #333;
+}
+
+/* 본문: 상품 리스트 */
+.cart-body {
+  flex: 1;
+  overflow-y: auto; /* 내용 많으면 스크롤 */
+  padding: 0 24px;
+}
+
+.empty-cart-message {
+  text-align: center;
+  margin-top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 14px;
+}
+
+/* 개별 상품 아이템 스타일 (레퍼런스 이미지 반영) */
+.cart-item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cart-item {
+  display: flex;
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid #000000;
+}
+
+.cart-item-img img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  background-color: #f5f5f5;
+}
+
+.cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cart-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cart-item-title {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #333;
+  padding-right: 10px;
+}
+
+.cart-item-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #999;
+}
+.cart-item-delete .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.cart-item-price {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.cart-item-options {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+/* 수량 조절 버튼 (레퍼런스와 유사하게) */
+.cart-quantity-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.qty-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #555;
+  padding: 0 5px;
+}
+.qty-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 하단: 결제 버튼 */
+.cart-footer {
+  padding: 24px;
+  border-radius: 8px;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+
+.cart-subtotal {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.checkout-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s;
+  border-radius: 8px;
+}
+
+.checkout-btn:hover {
+  background: #333;
+}

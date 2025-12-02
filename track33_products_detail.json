@@ -1,0 +1,40 @@
+{
+    "products": [
+        {
+            "id": 0,
+            "title": "Sade Love Deluxe (2LP)",
+            "artist": "Sade",
+            "price": 39000,
+            "frontImage": "02_vinyl0.jpg",
+            "isOutOfStock": false,
+            "tracklist": [
+              "No Ordinary Love (Remastered)",
+              "Feel No Pain (Remastered)",
+              "I Couldn't Love You More (Remastered)",
+              "Like a Tattoo (Remastered)",
+              "Kiss of Life (Remastered)",
+              "Cherish the Day (Remastered)",
+              "Pearls (Remastered)",
+              "Bullet Proof Soul (Remastered)",
+              "Mermaid (Remastered)"
+            ],
+            "youtubeEmbedUrl": "https://www.youtube.com/embed/CtthQ_JotFU?si=PQchhP4RnKPp9kZQ"
+        },
+        {
+            "id": 1,
+            "title": "The Black Skirts 3rd Album LP Splatter Color",
+            "artist": "Artist",
+            "price": 42000,
+            "frontImage": "02_vinyl1.png",
+            "isOutOfStock": true,
+            "tracklist": [
+              "song 1",
+              "song 2 (Remastered)",
+              "song 3",
+              "song 4",
+              "song 5"
+            ],
+            "youtubeEmbedUrl": "https://www.youtube.com/embed/CtthQ_JotFU?si=PQchhP4RnKPp9kZQ"
+        }
+    ]
+  }
