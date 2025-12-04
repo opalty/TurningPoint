@@ -1,12 +1,12 @@
-<header>
-    <div class="logo">
+  <header id="header" class="nav-header">
+    <div class="logo nav-logo">
       <a href="02_track33_homepage.html">
         <img src="02_logo.png" alt="사이트 로고" />
       </a>
     </div>
 
-    <div class="header-right">
-      <nav>
+    <div class="header-right nav-right">
+      <nav class="nav-menu">
         <ul>
           <li><a href="02_track33_homepage.html">Home</a></li>
           <li><a href="02_track33_shoppinglist.html">Shop All</a></li>
@@ -14,13 +14,18 @@
         </ul>
       </nav>
 
-      <!-- 네비게이션 서치바-->
-      <form class="search header-search" action="/search" method="get" role="search" aria-label="상단 상품 검색">
+      <form
+        class="nav-search"
+        action="/search"
+        method="get"
+        role="search"
+        aria-label="상단 상품 검색"
+      >
         <input type="search" name="q" placeholder="Search" aria-label="상품 검색" />
         <span class="material-symbols-outlined">search</span>
       </form>
 
-      <div class="icons">
+      <div class="icons nav-icons">
         <a href="#" aria-label="장바구니">
           <span class="material-symbols-outlined" style="font-size:24px;">shopping_cart</span>
         </a>
