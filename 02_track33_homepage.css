@@ -7,7 +7,7 @@
 :root {
   --nav-h: 72px;
   --nav-vpad: 15px;
-  --accent: #a58e74;
+  --accent: #499aa1;
   --lp-size: 260px;       
   --lp-gap: 30px;         
   --visual-height: 650px; 
@@ -687,4 +687,5 @@ footer {
 .footer-copy {
   font-size: 12px; color: white; text-align: right; padding-right: 12px; margin-bottom: -40px;
   font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
+
 }
