@@ -1,0 +1,797 @@
+/* ------------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------------*/
+/* ----------------------- 공통: header 기본 레이아웃/색 ---------------------------*/
+/* ------------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------------*/
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--nav-h);
+  padding: var(--nav-vpad) 5%;
+  color: #fff;
+  transition: background .25s ease, backdrop-filter .25s ease;
+}
+
+/* 링크/아이콘 상위 color(#fff)를 사용 */
+header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header .material-symbols-outlined {
+  color: currentColor;
+}
+
+/* ♥️새로 추가!!!!!!!!!!!!!♥️ */
+/* 헤더에 새로 추가한 검색바 전용 스타일 */
+header .header-search {
+  width: 210px;
+  margin: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  padding-bottom: 4px;
+}
+
+header .header-search input {
+  background: none;
+  border: none;
+  color: #ffffff;
+}
+
+header .header-search input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+header .header-search .material-symbols-outlined {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+
+/* 로고 크기(선택) */
+.logo img {
+  height: calc(var(--nav-h) - 2 * var(--nav-vpad));
+  width: auto;
+  display: block;
+}
+
+/* 우측 레이아웃 */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+nav ul {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ♥️새로 추가!!!!!!!!!!!!!♥️ */
+nav a {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  -webkit-text-stroke: 0.45px;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+.icons {
+  display: flex;
+  gap: 18px;
+}
+
+/* =========================
+   공통: 스크롤 전환 키프레임
+   ========================= */
+/* 불투명 → 반투명 */
+@keyframes opaqueToSemi {
+  0% {
+    background: rgba(0,0,0, 1);
+    backdrop-filter: blur(0px);
+  }
+
+  100% {
+    background: rgba(0,0,0, .9);
+    backdrop-filter: blur(5px);
+  }
+}
+
+/* 투명 → 반투명*/
+@keyframes transparentToSemi {
+  0% {
+    background: rgba(0,0,0, 0);
+    backdrop-filter: blur(0px);
+  }
+
+  100% {
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(5px);
+  }
+}
+
+/*  홈/결제/상품상세
+   불투명 -> 반투명+블러*/
+body.home-page header,
+body.payment header,
+body.product-detail header {
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(4px);
+  animation: opaqueToSemi both linear;
+  animation-timeline: scroll(root block);
+  animation-range: 0 200px;
+}
+
+/*쇼핑리스트/멤버십
+   투명 -> 반투명+블러*/
+body.shopping-list header,
+body.membership header {
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(4px);
+  animation: transparentToSemi both linear;
+  animation-timeline: scroll(root block);
+  animation-range: 0 200px;
+}
+
+
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* --------------------- shopping list -----------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+
+
+:root {
+  --accent: #499aa1;
+  --wrap: 85%;
+  --nav-h: 72px;
+  --nav-vpad: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.shopping-list {
+  margin: 0;
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  background: #ffffff;
+  color: #4d4b48;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0.5, "opsz" 24;
+  font-size: 28px;
+  vertical-align: middle;
+}
+
+
+.body.shopping-list {
+  padding-top: 0;
+}
+
+.shoppinglist-after-hero {
+  padding-top: 80px;
+}
+
+.shoppinglist-hero {
+  position: relative;
+  height: min(68vh, 760px);
+  width: 100%;
+  background-image: url("02_vintage1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  isolation: isolate;
+
+  margin: 0;
+}
+
+.shoppinglist-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0.15) 40%,
+      rgba(0, 0, 0, 0.4));
+}
+
+.overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2.5vw, 18px);
+  z-index: 1;
+  text-align: center;
+  padding: 0 12px;
+  margin-top: 40px;
+}
+
+.overlay h2 {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: clamp(18px, 3.2vw, 34px);
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.thumbs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(110px, 14vw, 180px);
+  gap: clamp(16px, 3vw, 28px);
+}
+
+.thumb {
+  width: clamp(110px, 14vw, 180px);
+  aspect-ratio: 1 / 1;
+  border-radius: 100px;
+  overflow: hidden;
+  background: #1b1b1b;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.thumb:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* ♥️새로 수정!!!!!!!!!!!!!♥️ */
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+
+  /* 기본은 흑백 */
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+/* 호버했을 때만 컬러로 */
+.thumb:hover img {
+  filter: grayscale(0%);
+}
+
+
+.top-artists-title {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 700;
+  -webkit-text-stroke: 0.45px;
+      }
+
+/* 검색 */
+.search {
+  width: 60%;
+  margin: 28px auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #4d4b48;
+  padding-bottom: 8px;
+}
+
+.search input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #4d4b48;
+  padding: 8px 0;
+}
+
+.search input:focus {
+  outline: none;
+}
+
+/* 서치바  */
+.search {
+  align-items: flex-end;
+  padding-bottom: 4px;
+}
+
+.search input {
+  padding: 0;
+  line-height: 1.05;
+}
+
+/* 돋보기 아이콘 */
+.search .material-symbols-outlined {
+  font-size: 22px;
+  line-height: 1;
+  transform: translateY(2px);
+}
+
+/* 카테고리 */
+.cats {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+
+  /*쇼핑 리스트와 동일한 가로 폭 */
+  width: var(--wrap);
+  margin: 36px auto 28px;
+
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px 24px;
+  border-radius: 5px;
+  backdrop-filter: blur(4px);
+}
+
+
+/* ♥️새로 수정!!!!!!!!!!!!!♥️ */
+.cats a {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.45px;
+}
+
+
+.cats a:hover,
+.cats a.is-active {
+  color: var(--accent);  /* 포인트 컬러 */
+  transform: translateY(-1px);
+}
+
+/* 정렬 라디오 버튼 스타일 */
+.sort-controls {
+  width: var(--wrap);
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.sort-controls form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sort-controls input {
+  display: none;
+}
+
+.sort-controls span {
+  display: inline-block;
+  background: none;
+  border: 1px solid #4d4b48;
+  color: #4d4b48;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.sort-controls input:checked+span {
+  background: #282828;
+  color: #fefefe;
+  border-color:#282828;
+}
+
+.sort-controls span:hover {
+  background: rgba(109, 201, 209, 0.4); 
+  color: #111;
+  border-color: rgba(109, 201, 209, 0.4); 
+}
+
+
+.list {
+  width: var(--wrap);
+  margin: 24px auto 40px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;            
+}
+
+
+
+/* ♥️새로 수정!!!!!!!!!!!!!쇼핑리스트 카드♥️ */
+.card {
+  position: relative;
+  background: transparent;     /* 배경색은 페이지랑 자연스럽게 섞이게 */
+  border: none;                /* 테두리 제거 */
+  border-radius: 0;
+  padding: 0 0 18px;           /* 위쪽 여백 제거, 아래만 살짝 */
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+
+/*  찜 하트 */
+.card a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 이미지 두 장 겹치기 */
+.pic {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 0px;
+  overflow: hidden;
+}
+
+.pic img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.25s ease;
+  border: none;
+}
+
+
+.pic img.back {
+  opacity: 0;
+}
+
+/* 기본은 앞면만 보임 */
+.card:hover .pic img.front {
+  opacity: 0;
+}
+
+/* 호버 시 앞면 숨김 */
+.card:hover .pic img.back {
+  opacity: 1;
+}
+
+
+
+.title {
+  margin-top: 10px;
+  font-size: 0.92rem;          
+  font-weight: 400;
+  line-height: 1.4;
+  color: #111;
+  min-height: 2.4em;            
+}
+
+.price {
+  margin-top: 6px;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+
+
+/* 구분선 */
+hr {
+  width: var(--wrap);
+  margin: 60px auto;
+  border: 0;
+  border-top: 1px solid #333;
+}
+
+/* 찜(하트) 토글 */
+.wish {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 2;
+}
+
+.wish input {
+  display: none;
+}
+
+.wish label {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.wish label:hover {
+  background: rgba(0, 0, 0, 0);
+}
+
+.wish .material-symbols-outlined {
+  font-size: 22px;
+  color: var(--accent);
+  transition: color 0.2s ease;
+}
+
+.wish input:checked+label .material-symbols-outlined {
+  color: var(--accent);
+  font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 24;
+}
+
+.catalog-title {
+  width: var(--wrap);
+  margin: 10px auto 0;
+  text-align: center;
+  font-weight: 800;
+  font-size: clamp(24px, 3.6vw, 48px);
+  line-height: 1.15;
+  font-family: "Cormorant Garamond", serif;
+  -webkit-text-stroke: 0.4px;
+}
+
+.catalog-toolbar {
+  width: var(--wrap);
+  margin: 16px auto 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.catalog-toolbar .sort-controls {
+  width: auto;
+  margin: 0;
+}
+
+.catalog-toolbar .search {
+  width: 340px;
+  margin: 0;
+}
+
+/* 더보기 버튼 */
+.more-btn {
+  text-align: center;
+  margin: 18px 0 60px;
+}
+
+/* ♥️새로 수정!!!!!!!!!!!!!♥️ */
+
+.more-btn button {
+  background: none;
+  border: 1px solid var(--accent);
+  color: #111111;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  padding: 7px 22px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.more-btn button:hover {
+  background: var(--accent);  /* 포인트 컬러 */
+  color: #f7f5f0;
+  border-color: var(--accent);
+}
+
+
+/* ♥️새로 추가!!!!!!!!!!!!!♥️ */
+
+/* 품절(out-of-stock) 카드 */
+.card.out-of-stock .pic img {
+  filter: grayscale(100%) contrast(1.1) brightness(0.8) blur(2px);
+}
+
+.card.out-of-stock .pic::after {
+  content: "OUT OF STOCK";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 6px 0 7px;
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.75);
+  color: #f7f5f0;
+}
+
+
+
+
+
+
+/* ♥️새로 추가!!!!!!!!!!!!!♥️ */
+/* ============================================================
+   JS 연동용 상태 스타일 (위시리스트, 희귀판 표시 등)
+   ============================================================ */
+
+
+/* 희귀판 레이블 표시 */
+.card.rare .price::after {
+  content: " RARE";
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  background: #494949;
+  color: #f7f5f0;
+}
+
+/* 위시리스트 개수 표시 영역 */
+.wishlist-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.wishlist-info strong {
+  font-weight: 600;
+}
+
+
+
+/* ------------------------------------------------------------------------------*/
+/* Footer */
+/* ------------------------------------------------------------------------------*/
+
+footer {
+  background: black;
+  color: var(--text-invert);
+  padding: 32px 80px 24px;
+  margin-top: 40px;
+  padding-inline: 24px;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-about {
+  flex: 1 1 60%;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.8;
+  text-align: left;
+  opacity: 0.9;
+  color: white;
+}
+
+.footer-divider {
+  border-top: 1px solid rgb(255, 255, 255);
+  margin-top: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-logo-selection {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.footer-logo-img {
+  width: clamp(80px, 10vw, 140px);
+  height: auto;
+  border-radius: 5px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: white;
+  text-align: right;
+  padding-right: 12px;
+  margin-bottom: -40px;
+}
+
+/* 카드 왼쪽 상단에 순번 표시 */
+.card-index {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*  정사각형 고정 크기 */
+  width: 24px;
+  height: 24px;
+
+  /* 안쪽 여백 제거 (내용으로 크기 안 늘어나게) */
+  padding: 0;
+
+  background: #000;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  /*  가운데 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 글자 여러 자릿수여도 세로 가운데 오게 */
+  line-height: 1;
+
+  z-index: 5;
+  pointer-events: none;
+}
+
+
+
+/* BACK IN STOCK 섹션 전체 */
+.back-in-stock {
+  margin-bottom: 32px;
+}
+
+/* BACK IN STOCK 제목 살짝 튀게 */
+.back-in-stock .back-title {
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* 가로 스크롤 래퍼 */
+.back-in-stock-row {
+  margin-top: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+/* 실제 카드들이 들어갈 트랙: 가로로 일렬 */
+.back-in-stock-track {
+  display: flex;
+  gap: 18px;
+  /* 카드들이 한 줄로 가도록 최소 너비 확보 */
+  min-width: max-content;
+}
+
+/* BACK IN STOCK 안에 들어가는 카드 크기 조정 (1행 5열 느낌) */
+.back-in-stock .card {
+  min-width: 200px;   /* 카드 가로폭 고정 느낌 */
+  max-width: 220px;
+}
+
+/* 이 섹션에서는 순위 박스 필요 없으면 숨기기 (선택 사항) */
+.back-in-stock .card-index {
+  display: none;
+}
