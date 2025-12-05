@@ -5,7 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Turning Point</title>
-  <link rel="stylesheet" href="02_track33_turningpoint.css">
+  <link rel="stylesheet" href="02_track33_shoppinglist.css">
+  <link rel="stylesheet" href="02_track33_nav.css">
   <link rel="stylesheet" as="style" crossorigin
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 
@@ -23,15 +24,15 @@
 </head>
 
 <body class="shopping-list">
-  <header>
-    <div class="logo">
+  <header id="header" class="nav-header">
+    <div class="logo nav-logo">
       <a href="02_track33_homepage.html">
-        <img src="02_logo.png" alt="사이트 로고" />
+        <img src="assets/02_logo.png" alt="사이트 로고" />
       </a>
     </div>
 
-    <div class="header-right">
-      <nav>
+    <div class="header-right nav-right">
+      <nav class="nav-menu">
         <ul>
           <li><a href="02_track33_homepage.html">Home</a></li>
           <li><a href="02_track33_shoppinglist.html">Shop All</a></li>
@@ -39,13 +40,18 @@
         </ul>
       </nav>
 
-      <!-- 네비게이션 서치바-->
-      <form class="search header-search" action="/search" method="get" role="search" aria-label="상단 상품 검색">
+      <form
+        class="nav-search"
+        action="/search"
+        method="get"
+        role="search"
+        aria-label="상단 상품 검색"
+      >
         <input type="search" name="q" placeholder="Search" aria-label="상품 검색" />
         <span class="material-symbols-outlined">search</span>
       </form>
 
-      <div class="icons">
+      <div class="icons nav-icons">
         <a href="#" aria-label="장바구니">
           <span class="material-symbols-outlined" style="font-size:24px;">shopping_cart</span>
         </a>
@@ -57,15 +63,16 @@
   </header>
 
 
+
   <section class="shoppinglist-hero" aria-label="상단 큰 배경 이미지">
     <div class="overlay" aria-label="WEEK BEST 및 썸네일">
       <h2 class="top-artists-title">TOP ARTISTS</h2>
       <div class="thumbs">
-        <div class="thumb"><img src="02_artist1.jpg" alt="썸네일 1" /></div>
-        <div class="thumb"><img src="02_artist3.png" alt="썸네일 2" /></div>
-        <div class="thumb"><img src="02_artist4.jpg" alt="썸네일 3" /></div>
-        <div class="thumb"><img src="02_artist2.jpg" alt="썸네일 4" /></div>
-        <div class="thumb"><img src="02_artist5.jpg" alt="썸네일 5" /></div>
+        <div class="thumb"><img src="assets\02_artist1.jpg" alt="썸네일 1" /></div>
+        <div class="thumb"><img src="assets\02_artist3.png" alt="썸네일 2" /></div>
+        <div class="thumb"><img src="assets\02_artist4.jpg" alt="썸네일 3" /></div>
+        <div class="thumb"><img src="assets\02_artist2.jpg" alt="썸네일 4" /></div>
+        <div class="thumb"><img src="assets\02_artist5.jpg" alt="썸네일 5" /></div>
       </div>
     </div>
   </section>
@@ -111,21 +118,21 @@
       <!-- JS에서 JSON을 읽어 상품 카드를 동적으로 생성-->
     </section>
 
+    <!-- 페이지네이션 -->
     <div class="more-btn">
-      <button>더보기</button>
+      <div class="pagination" data-role="pagination"></div>
     </div>
 
-    <section class="back-in-stock" aria-label="Back in stock vinyl 섹션">
-      <h2 class="catalog-title back-title">BACK IN STOCK</h2>
+    <!-- ★ BACK IN STOCK 섹션 추가 ★ -->
+    <section class="back-in-stock-section" aria-label="재입고 LP">
+      <h2 class="catalog-title back-in-stock-title">BACK IN STOCK</h2>
 
-      <div class="back-in-stock-row" aria-label="다시 입고된 바이닐 목록">
-        <div class="back-in-stock-track">
-          <!-- JS에서 vinyl 상품 5개를 가로 카드로 채워 넣음 -->
-        </div>
+      <div class="back-in-stock-list">
+        <!-- JS에서 LP JSON을 읽어 카드 10개까지 생성 -->
       </div>
     </section>
 
-    <hr />
+
 
     <!-- 레코드 쇼핑리스트 -->
     <h2 class="catalog-title">Turntable</h2>
@@ -157,7 +164,7 @@
       <!-- JS에서 JSON을 읽어 상품 카드를 동적으로 생성 -->
     </section>
     <div class="more-btn">
-      <button>더보기</button>
+      <div class="pagination" data-role="pagination"></div>
     </div>
   </div>
 
