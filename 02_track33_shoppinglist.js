@@ -1,61 +1,35 @@
-/* ============================================================
- * 02_track33_shoppinglist.js
- *  - 쇼핑리스트 페이지(vinyl / turntable 등) 공용 스크립트
- *  - 각 섹션(툴바 + 상품 리스트)을 "독립적으로" 제어하도록 수정
- *  - 요구사항:
- *    1) EventListener 를 사용한 사용자 상호작용
- *    2) Fetch + JSON 으로 데이터 연동
- *    3) localStorage 로 사용자 상태(위시리스트, 정렬, 검색어) 저장
- * ============================================================ */
-
 'use strict';
 
-// DOM 이 모두 준비된 후 실행
 document.addEventListener('DOMContentLoaded', function () {
-  /* ------------------------------------------------------------
-   * 0. 페이지 안의 "카탈로그 섹션"을 모두 찾아서 각각 초기화
-   *    - 구조 가정:
-   *      <div class="catalog-toolbar"> ... 정렬/검색 ... </div>
-   *      <section class="list" data-storage="vinyl" data-json="02_track33_products_vinyl.json">
-   *        ... 상품 카드들 ...
-   *      </section>
-   * ------------------------------------------------------------ */
-
-  // 모든 툴바(각각이 하나의 섹션의 시작점)를 찾는다.
   const toolbars = document.querySelectorAll('.catalog-toolbar');
 
   toolbars.forEach(function (toolbarEl, sectionIndex) {
-    // 이 툴바 바로 아래(또는 근처)에 있는 .list 요소를 찾는다.
     let listEl = toolbarEl.nextElementSibling;
     while (listEl && !listEl.classList.contains('list')) {
       listEl = listEl.nextElementSibling;
     }
-    if (!listEl) return; // 방어 코드: 리스트가 없으면 이 섹션은 무시
+    if (!listEl) return;
 
-    // 각 섹션별로 localStorage prefix 와 JSON URL 을 정한다.
-    // HTML 에서 data-storage / data-json 으로 지정해주면 그 값을 사용하고,
-    // 없으면 기본값을 사용한다.
     const storagePrefix = listEl.dataset.storage || ('section' + sectionIndex);
     const jsonUrl = listEl.dataset.json || '02_track33_products.json';
 
-    // 이 툴바 + 리스트 조합을 하나의 카탈로그 섹션으로 초기화
     initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl);
   });
+
+  initBackInStockSection();
 });
 
+
 /**
- * 하나의 "카탈로그 섹션"(툴바 + 상품 리스트)에 대한 모든 기능을 초기화하는 함수
+ *
  *
  * @param {HTMLElement} toolbarEl  - 정렬/검색 UI 를 담고 있는 요소(.catalog-toolbar)
  * @param {HTMLElement} listEl     - 상품 카드들을 담고 있는 요소(.list)
- * @param {string} storagePrefix   - localStorage 키 앞에 붙일 섹션별 prefix (예: "vinyl")
+ * @param {string} storagePrefix   - localStorage 키 앞에 붙일 섹션별 prefix 
  * @param {string} jsonUrl         - 이 섹션의 상품 부가정보를 담은 JSON 파일 경로
  */
 
 function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
-  /* ------------------------------------------------------------
-   * 1. localStorage 키 정의 및 헬퍼
-   * ------------------------------------------------------------ */
   const STORAGE_KEYS = {
     wishlist: storagePrefix + '-wishlist',
     sort: storagePrefix + '-sort-option',
@@ -81,15 +55,12 @@ function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
     }
   }
 
-  /* ------------------------------------------------------------
-   * 2. 이 섹션에서 사용할 상태 변수들
-   * ------------------------------------------------------------ */
-  let products = [];              // JSON 에서 읽어온 모든 상품 데이터
+  let products = [];            
   const isVinyl = storagePrefix === 'vinyl';
   const isTurntable = storagePrefix === 'turntable';
 
   const itemsPerPage = isVinyl ? 15 : (isTurntable ? 5 : Infinity);
-  let visibleCount = itemsPerPage;
+  let currentPage = 1;   // 1, 2, 3...
 
   let wishlist = loadJSON(STORAGE_KEYS.wishlist, []);
   let currentSort = loadJSON(STORAGE_KEYS.sort, 'latest');
@@ -99,28 +70,27 @@ function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
   // 위시리스트 개수 표시 요소
   const wishlistCountEl = toolbarEl.querySelector('[data-role="wishlist-count"]');
 
-  // 검색 인풋(툴바 안에 한 개 이상 있을 수 있으므로 모두 가져옴)
+  // 검색 인풋
   const searchInputs = toolbarEl.querySelectorAll('form.search input[type="search"]');
   searchInputs.forEach(function (input) {
     input.value = lastSearch || '';
   });
 
-  // 섹션 하단의 "더보기" 버튼 (각 섹션별로 자기 바로 아래 .more-btn만 찾도록 수정)
-  let moreBtn = null;
-  let moreBtnWrapper = listEl.nextElementSibling;
+  // 섹션 하단의 페이지네이션 영역
+  let paginationEl = null;
+  let paginationWrapper = listEl.nextElementSibling;
 
-  // ⭐ listEl 바로 다음 형제들 중에서 .more-btn 을 찾는다
-  while (moreBtnWrapper && !moreBtnWrapper.classList.contains('more-btn')) {
-    moreBtnWrapper = moreBtnWrapper.nextElementSibling;
+  while (paginationWrapper && !paginationWrapper.classList.contains('more-btn')) {
+    paginationWrapper = paginationWrapper.nextElementSibling;
   }
 
-  if (moreBtnWrapper) {
-    moreBtn = moreBtnWrapper.querySelector('button');
+  if (paginationWrapper) {
+    paginationEl = paginationWrapper.querySelector('.pagination') || paginationWrapper;
   }
 
 
-  // 카테고리 네비게이션(nav.cats)을 이 섹션 근처에서 탐색
-  // ⭐ Vinyl 섹션일 때만 카테고리 네비게이션을 사용하도록 제한
+
+  // Vinyl 섹션일 때만 카테고리 네비게이션을 사용하도록 제한
   let categoryNav = null;
   if (isVinyl) {
     let parent = listEl.parentElement;
@@ -131,9 +101,6 @@ function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
   }
 
 
-  /* ------------------------------------------------------------
-   * 3. 카드 생성 / 렌더링 유틸
-   * ------------------------------------------------------------ */
   function formatPrice(price) {
     if (typeof price !== 'number') return price || '';
     try {
@@ -149,7 +116,7 @@ function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
     article.dataset.productIndex = String(index);
     article.dataset.category = product.category || 'ALL';
 
-    // 🔢 카드 순번 박스 (초기 값은 index+1, 실제 표시는 updateVisibility에서 다시 세팅)
+    
     const indexBadge = document.createElement('div');
     indexBadge.className = 'card-index';
     indexBadge.textContent = String(index + 1);
@@ -176,7 +143,6 @@ function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
     wishDiv.appendChild(checkbox);
     wishDiv.appendChild(label);
 
-    // 링크 및 썸네일, 텍스트
     const link = document.createElement('a');
     link.href = product.detailUrl || '#';
     const ariaTitle = product.title ? product.title + ' 상세보기' : '상품 상세보기';
@@ -236,11 +202,9 @@ function initCatalogSection(toolbarEl, listEl, storagePrefix, jsonUrl) {
     });
   }
 
-  /* ------------------------------------------------------------
-   * 4. 필터/정렬/더보기 로직
-   * ------------------------------------------------------------ */
+  /* 필터/정렬/더보기 로직 */
 function matchesFilters(product) {
-  // ⭐ 희귀판 정렬일 때는 희귀판이 아닌 상품은 아예 제외
+  // 희귀판 정렬일 때는 희귀판이 아닌 상품은 아예 제외
   if (currentSort === 'rare' && !product.isRare) {
     return false;
   }
@@ -268,7 +232,6 @@ function matchesFilters(product) {
       wishlistCountEl.textContent = String(Array.isArray(wishlist) ? wishlist.length : 0);
     }
 
-    // 카드 위의 체크박스 상태 동기화
     listEl.querySelectorAll('.wish input[type="checkbox"]').forEach(function (checkbox) {
       const idx = parseInt(checkbox.dataset.productIndex, 10);
       checkbox.checked = Array.isArray(wishlist) && wishlist.indexOf(idx) !== -1;
@@ -289,7 +252,7 @@ function matchesFilters(product) {
         return (a.price || 0) - (b.price || 0);
       });
     } else if (currentSort === 'rare') {
-      // 희귀판 우선, 그 다음 인기순
+
       sorted.sort(function (a, b) {
         const ra = a.isRare ? 1 : 0;
         const rb = b.isRare ? 1 : 0;
@@ -297,7 +260,6 @@ function matchesFilters(product) {
         return (b.popularity || 0) - (a.popularity || 0);
       });
     } else {
-      // latest(기본): id 또는 index 기준 오름차순
       sorted.sort(function (a, b) {
         const av = typeof a.id === 'number' ? a.id : a.index;
         const bv = typeof b.id === 'number' ? b.id : b.index;
@@ -305,7 +267,6 @@ function matchesFilters(product) {
       });
     }
 
-    // 정렬된 순서대로 DOM 재배치
     sorted.forEach(function (p, newIndex) {
       p.index = newIndex;
       if (p.element) {
@@ -320,12 +281,35 @@ function matchesFilters(product) {
  function updateVisibility() {
     if (!products) return;
 
-    let shown = 0;
-    const totalMatched = products.reduce(function (acc, p) {
-      return acc + (matchesFilters(p) ? 1 : 0);
-    }, 0);
+    const matchedIndices = [];
+    products.forEach(function (p, idx) {
+      if (matchesFilters(p)) {
+        matchedIndices.push(idx);
+      }
+    });
 
-    products.forEach(function (p) {
+    const totalMatched = matchedIndices.length;
+
+    // 페이지 수 계산 
+    const totalPages = (itemsPerPage === Infinity || totalMatched === 0)
+      ? 1
+      : Math.max(1, Math.ceil(totalMatched / itemsPerPage));
+
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = (itemsPerPage === Infinity) ? totalMatched : (start + itemsPerPage);
+
+
+    const rankMap = {};
+    matchedIndices.forEach(function (prodIndex, pos) {
+      rankMap[prodIndex] = pos;
+    });
+
+    let shown = 0;
+
+    products.forEach(function (p, idx) {
       const el = p.element;
       if (!el) return;
 
@@ -334,37 +318,92 @@ function matchesFilters(product) {
         return;
       }
 
-      if (shown < visibleCount) {
+      const pos = rankMap[idx];  // 필터된 리스트 안에서의 순서
+
+      if (pos >= start && pos < end) {
         shown += 1;
         el.style.display = '';
 
-        // 🔢 현재 화면에 보이는 순서대로 번호 업데이트
         const indexBadge = el.querySelector('.card-index');
         if (indexBadge) {
-          indexBadge.textContent = String(shown);
+          indexBadge.textContent = String(pos + 1); // 전체 중 몇 번째인지
         }
       } else {
         el.style.display = 'none';
       }
     });
 
-    if (moreBtn) {
-      // ⭐ 더보기 버튼 표시 여부는 "보여줄 수 있는 개수(visibleCount)" vs "조건 통과한 전체 개수(totalMatched)" 비교
-      moreBtn.style.display = (visibleCount >= totalMatched) ? 'none' : '';
-    }
+    renderPagination(totalPages, totalMatched);
  }
+
+   function renderPagination(totalPages, totalMatched) {
+    if (!paginationEl || itemsPerPage === Infinity || totalMatched === 0) {
+      if (paginationEl) paginationEl.innerHTML = '';
+      return;
+    }
+
+    paginationEl.innerHTML = '';
+
+    // 버튼 생성 
+    function makePageBtn(label, page, options) {
+      const btn = document.createElement('button');
+      btn.textContent = label;
+
+      if (options && options.className) {
+        btn.classList.add(options.className);
+      }
+
+      if (options && options.disabled) {
+        btn.disabled = true;
+      } else {
+        btn.addEventListener('click', function () {
+          if (page === currentPage) return;
+          currentPage = page;
+          updateVisibility();
+        });
+      }
+
+      if (options && options.active) {
+        btn.classList.add('is-active');
+      }
+
+      paginationEl.appendChild(btn);
+    }
+
+    const isFirstPage = currentPage === 1;
+    const isLastPage = currentPage === totalPages;
+
+    // « (첫 페이지)
+    makePageBtn('«', 1, { disabled: isFirstPage });
+
+    // ‹ (이전 페이지)
+    makePageBtn('‹', Math.max(1, currentPage - 1), { disabled: isFirstPage });
+
+    // 숫자 버튼
+    for (let p = 1; p <= totalPages; p++) {
+      makePageBtn(String(p), p, {
+        className: 'page-number',
+        active: p === currentPage
+      });
+    }
+
+    // › (다음 페이지)
+    makePageBtn('›', Math.min(totalPages, currentPage + 1), { disabled: isLastPage });
+
+    // » (마지막 페이지)
+    makePageBtn('»', totalPages, { disabled: isLastPage });
+  }
+
 
 
   function applyStoredState() {
-    // 정렬 라디오 버튼
+
     const sortRadios = toolbarEl.querySelectorAll('input[name="sort"]');
     sortRadios.forEach(function (radio) {
       radio.checked = (radio.value === currentSort);
     });
 
-    // 검색 인풋은 이미 load 시 값 주입
 
-    // 카테고리 네비게이션
     if (categoryNav) {
       const links = categoryNav.querySelectorAll('a[data-category]');
       links.forEach(function (link) {
@@ -374,9 +413,6 @@ function matchesFilters(product) {
     }
   }
 
-  /* ------------------------------------------------------------
-   * 5. 이벤트 리스너 등록
-   * ------------------------------------------------------------ */
   function initEventListeners() {
     // 정렬 옵션
     const sortRadios = toolbarEl.querySelectorAll('input[name="sort"]');
@@ -387,7 +423,7 @@ function matchesFilters(product) {
         saveJSON(STORAGE_KEYS.sort, currentSort);
         applySort();
         // 정렬이 바뀌면 첫 페이지부터 다시 보여주기
-        visibleCount = itemsPerPage;
+        currentPage = 1;
         updateVisibility();
       });
     });
@@ -397,7 +433,7 @@ function matchesFilters(product) {
       input.addEventListener('input', function () {
         lastSearch = input.value.trim();
         saveJSON(STORAGE_KEYS.lastSearch, lastSearch);
-        visibleCount = itemsPerPage;
+        currentPage = 1;
         updateVisibility();
       });
     });
@@ -417,12 +453,12 @@ function matchesFilters(product) {
           a.classList.toggle('is-active', a === link);
         });
 
-        visibleCount = itemsPerPage;
+        currentPage = 1;
         updateVisibility();
       });
     }
 
-    // 위시리스트 체크박스 (이벤트 위임)
+    // 위시리스트 체크박스
     listEl.addEventListener('change', function (event) {
       const target = event.target;
       if (!target.matches || !target.matches('.wish input[type="checkbox"]')) return;
@@ -445,19 +481,10 @@ function matchesFilters(product) {
       updateWishlistUI();
     });
 
-    // 더보기 버튼
-    if (moreBtn) {
-      moreBtn.addEventListener('click', function () {
-        visibleCount += itemsPerPage;
-        updateVisibility();
-      });
-    }
+    
   }
 
-  /* ------------------------------------------------------------
-   * 6. JSON 로딩 후 초기 렌더링
-   * ------------------------------------------------------------ */
-  fetch(jsonUrl)
+    fetch(jsonUrl)
     .then(function (response) {
       if (!response.ok) {
         throw new Error('상품 JSON을 불러오는 데 실패했습니다: ' + jsonUrl);
@@ -487,10 +514,9 @@ function matchesFilters(product) {
         };
       });
 
-      // DOM 에 카드 생성
       rebuildList();
 
-      // 기본 위시리스트가 비어 있다면 첫 상품을 기본 찜으로 설정 (선택 사항)
+
       if (!Array.isArray(wishlist) || wishlist.length === 0) {
         if (products.length > 0) {
           wishlist = [0];
@@ -502,14 +528,101 @@ function matchesFilters(product) {
 
       updateWishlistUI();
       applyStoredState();
-      applySort();       // 정렬 적용
-      updateVisibility(); // 필터 + 더보기 적용
+      applySort();
+      updateVisibility();
       initEventListeners();
     })
     .catch(function (error) {
       console.error('[', storagePrefix, '] 상품 JSON 로드 실패:', error);
     });
-
-    
 }
+// ================= BACK IN STOCK 섹션 =================
+function initBackInStockSection() {
+  const container = document.querySelector('.back-in-stock-list');
+  if (!container) return;
 
+
+  const vinylListEl = document.querySelector('.list[data-storage="vinyl"]');
+  const jsonUrl = vinylListEl
+    ? (vinylListEl.dataset.json || '02_track33_products_vinyl.json')
+    : '02_track33_products_vinyl.json';
+
+  fetch(jsonUrl)
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('BACK IN STOCK: Vinyl JSON 로드 실패: ' + jsonUrl);
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      const products = Array.isArray(data.products) ? data.products : [];
+      if (products.length === 0) {
+        console.warn('BACK IN STOCK: products 배열이 비어 있습니다.');
+        return;
+      }
+
+
+      const candidates = products.filter(function (p) {
+        return p.isOutOfStock === false || p.isOutOfStock === undefined;
+      }).slice(0, 10);
+
+      candidates.forEach(function (product) {
+        const article = document.createElement('article');
+        article.className = 'card';
+
+        const link = document.createElement('a');
+        link.href = product.detailUrl || '#';
+        link.setAttribute(
+          'aria-label',
+          (product.title || '상품') + ' 상세 보기'
+        );
+
+        const picDiv = document.createElement('div');
+        picDiv.className = 'pic';
+
+        if (product.frontImage) {
+          const imgFront = document.createElement('img');
+          imgFront.className = 'front';
+          imgFront.src = product.frontImage;
+          imgFront.alt = (product.title || '상품') + ' 앞면';
+          picDiv.appendChild(imgFront);
+        }
+
+        if (product.backImage) {
+          const imgBack = document.createElement('img');
+          imgBack.className = 'back';
+          imgBack.src = product.backImage;
+          imgBack.alt = (product.title || '상품') + ' 뒷면';
+          picDiv.appendChild(imgBack);
+        }
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'title';
+        titleDiv.textContent = product.title || '';
+
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'price';
+        if (typeof product.price === 'number') {
+          priceDiv.textContent =
+            '₩' + product.price.toLocaleString('ko-KR');
+        } else if (product.price) {
+          priceDiv.textContent = product.price;
+        }
+
+        link.appendChild(picDiv);
+        link.appendChild(titleDiv);
+        link.appendChild(priceDiv);
+
+        article.appendChild(link);
+
+        if (product.isRare) {
+          article.classList.add('rare');
+        }
+
+        container.appendChild(article);
+      });
+    })
+    .catch(function (error) {
+      console.error('BACK IN STOCK 섹션 오류:', error);
+    });
+}
